@@ -1,4 +1,7 @@
 from flask import Flask
+import db
+
+VERSION = "1"
 
 app = Flask(__name__)
 
