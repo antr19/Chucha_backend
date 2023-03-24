@@ -1,5 +1,6 @@
 from flask import Flask
 import db
+import auth
 
 VERSION = "1"
 
