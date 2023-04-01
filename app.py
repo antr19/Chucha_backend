@@ -1,5 +1,7 @@
 from flask import Flask
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 import models.users
+
 
 def create_app():
     app = Flask(__name__)
@@ -15,6 +17,8 @@ def create_app():
 
 
 app = create_app()
+client = app.test_client()
+jwt = JWTManager(app)
 
 
 @app.route("/")

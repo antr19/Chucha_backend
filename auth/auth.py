@@ -1,5 +1,4 @@
-from flask import Blueprint, request
-from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
+from flask import Blueprint, request, jsonify
 from conf import *
 from models.users import *
 
@@ -7,24 +6,31 @@ auth = Blueprint('auth', __name__)
 prefix = "/".join(["", "api", VERSION, "auth"])
 
 
-@auth.route("/".join([prefix, "signup"]))
+@auth.route("/".join([prefix, "signup"]), methods=['POST'])
 def auth_signup():
-    request_data = request.get_json()
+    request_data = request.json
     if not request_data.get("login"):
-        return "Error login"
+        return jsonify({'status': 'error', 'description': "The login field is blank"})
     elif not request_data.get("password"):
-        return "Error password"
+        return jsonify({'status': 'error', 'description': "The password field is blank"})
     elif not request_data.get("email"):
-        return "Error email"
+        return jsonify({'status': 'error', 'description': "The email field is blank"})
     else:
-        query = User(
-            login=request_data.get("login"),
-            password=request_data.get("password"),
-            email=request_data.get("email")
-        )
-        session.add(query)
+        user = User(**request_data)
+        session.add(user)
         session.commit()
-        return "True"
+        return jsonify({'status': 'success', 'access_token': user.get_token()})
+
+
+@auth.route("/".join([prefix, "signin"]), methods=['POST'])
+def auth_signin():
+    request_data = request.json
+    try:
+        user = User.authenticate(**request_data)
+        return jsonify({'status': 'success', 'access_token': user.get_token()})
+    except Exception as e:
+        return jsonify({'status': 'error', 'description': f"Authentication failed: {str(e)}"})
+
 
 
 def test_print():
@@ -34,28 +40,3 @@ def test_print():
 # auth_login = HTTPBasicAuth()
 
 
-
-# tokens = {
-#     "secret-token-1": "john",
-#     "secret-token-2": "susan"
-# }
-#
-# @auth_token.verify_token
-# def verify_token(token):
-#     if token in tokens:
-#         return tokens[token]
-
-
-# @auth_login.get_password
-# def get_password(username):
-#     request_data = request.get_json() # only post?
-#     if username == 'miguel':
-#         return 'python'
-#     return None
-
-
-
-# @app.route("/".join([prefix, "auth"]))
-# @auth_login.login_required
-# def get_auth():
-#     return "get_auth"
