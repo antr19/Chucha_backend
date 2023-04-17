@@ -1,6 +1,9 @@
 from flask import Flask
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+
 import models.users
+from auth.auth import auth, test_print
+from swagger.swagger import swaggerui_blueprint
 
 
 def create_app():
@@ -9,9 +12,9 @@ def create_app():
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
 
     # blueprint for auth routes in our app
-    from auth.auth import auth, test_print
     test_print()
     app.register_blueprint(auth)
+    app.register_blueprint(swaggerui_blueprint)
 
     return app
 
