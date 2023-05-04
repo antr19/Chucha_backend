@@ -26,6 +26,24 @@
         "operationId": "auth/signup",
         "parameters": [
           {
+            "name": "first_name",
+            "in": "path",
+            "description": "User's first name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "last_name",
+            "in": "path",
+            "description": "User's last name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "login",
             "in": "path",
             "description": "User's login",
@@ -141,9 +159,17 @@
           "request": {
             "type": "object",
             "properties": {
-              "login": {
+              "first_name": {
                 "type": "string",
                 "example": "User"
+              },
+              "last_name": {
+                "type": "string",
+                "example": "Black"
+              },
+              "login": {
+                "type": "string",
+                "example": "user"
               },
               "email": {
                 "type": "string",
@@ -164,11 +190,11 @@
               },
               "access_token": {
                 "type": "string",
-                "example": ""
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4MzIzMDg..."
               },
               "description": {
                 "type": "string",
-                "example": ""
+                "example": "Successfully created!"
               }
             }
           }
@@ -196,11 +222,11 @@
               },
               "access_token": {
                 "type": "string",
-                "example": ""
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4MzIzMDg..."
               },
               "description": {
                 "type": "string",
-                "example": ""
+                "example": "Successfully created!"
               }
             }
           }
