@@ -24,12 +24,41 @@
         "summary": "Register new user",
         "description": "Register new user and return jwt-token",
         "operationId": "auth/signup",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "User's login",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "in": "path",
+            "description": "User's email",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "path",
+            "description": "User's password",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
-          "description": "Update an existent pet in the store",
+          "description": "",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Pet"
+                "$ref": "#/components/schemas/auth/signup/request"
               }
             }
           },
@@ -37,39 +66,17 @@
         },
         "responses": {
           "200": {
-            "description": "Successful operation",
+            "description": "User registred successfully!",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pet"
+                  "$ref": "#/components/schemas/auth/signup/response"
                 }
               },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
               }
             }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Pet not found"
-          },
-          "405": {
-            "description": "Validation exception"
           }
         },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
-      }
     },
     "/api/v1/auth/signin": {
     "post": {
@@ -78,25 +85,35 @@
         ],
         "summary": "Auth user",
         "description": "Auth user and return jwt-token",
-        "operationId": "addPet",
+        "operationId": "auth/signin",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "User's login",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "path",
+            "description": "User's password",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
-          "description": "Create a new pet in the store",
+          "description": "",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Pet"
+                "$ref": "#/components/schemas/auth/signin/request"
               }
             },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/Pet"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Pet"
-              }
-            }
           },
           "required": true
         },
@@ -106,28 +123,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Pet"
+                  "$ref": "#/components/schemas/auth/signin/response"
                 }
               },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
-              }
             }
           },
-          "405": {
-            "description": "Invalid input"
-          }
         },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
       }
     }
 
@@ -135,51 +136,79 @@
   },
   "components": {
     "schemas": {
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "example": 10
+      "auth": {
+        "signup": {
+          "request": {
+            "type": "object",
+            "properties": {
+              "login": {
+                "type": "string",
+                "example": "User"
+              },
+              "email": {
+                "type": "string",
+                "example": "user@email.com"
+              },
+              "password": {
+                "type": "string",
+                "example": "12345678"
+              },
+            },
           },
-          "username": {
-            "type": "string",
-            "example": "theUser"
-          },
-          "firstName": {
-            "type": "string",
-            "example": "John"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "James"
-          },
-          "email": {
-            "type": "string",
-            "example": "john@email.com"
-          },
-          "password": {
-            "type": "string",
-            "example": "12345"
-          },
-          "phone": {
-            "type": "string",
-            "example": "12345"
-          },
-          "userStatus": {
-            "type": "integer",
-            "description": "User Status",
-            "format": "int32",
-            "example": 1
+          "response": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "example": "success"
+              },
+              "access_token": {
+                "type": "string",
+                "example": ""
+              },
+              "description": {
+                "type": "string",
+                "example": ""
+              }
+            }
           }
         },
-        "xml": {
-          "name": "user"
+        "signin": {
+          "request": {
+            "type": "object",
+            "properties": {
+              "login": {
+                "type": "string",
+                "example": "User"
+              },
+              "password": {
+                "type": "string",
+                "example": "12345678"
+              },
+            },
+          },
+          "response": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "example": "success"
+              },
+              "access_token": {
+                "type": "string",
+                "example": ""
+              },
+              "description": {
+                "type": "string",
+                "example": ""
+              }
+            }
+          }
         }
-      },
-    },
-    "requestBodies": {
+      }
+    }
+  },
+  "requestBodies": {
       "Pet": {
         "description": "Pet object that needs to be added to the store",
         "content": {
@@ -188,11 +217,6 @@
               "$ref": "#/components/schemas/Pet"
             }
           },
-          "application/xml": {
-            "schema": {
-              "$ref": "#/components/schemas/Pet"
-            }
-          }
         }
       },
       "UserArray": {
@@ -229,4 +253,3 @@
       }
     }
   }
-}

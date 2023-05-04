@@ -10,6 +10,8 @@ class User(Base):
     login = Column(String(200), nullable=False)
     email = Column(String(200), nullable=False)
     password = Column(String(200), nullable=False)
+    first_name = Column(String(200), nullable=True)
+    last_name = Column(String(200), nullable=True)
 
     __table_args__ = (
         UniqueConstraint('login'),
@@ -20,6 +22,8 @@ class User(Base):
         self.login = kwargs.get('login')
         self.email = kwargs.get('email')
         self.password = bcrypt.hash(kwargs.get('password'))
+        self.first_name = kwargs.get('first_name')
+        self.last_name = kwargs.get('last_name')
 
     def get_token(self, expire_date=24):
         expire_delta = timedelta(expire_date)
@@ -29,8 +33,8 @@ class User(Base):
         return token
 
     @classmethod
-    def authenticate(cls, email, password):
-        user = cls.query.filter(cls.email == email).one()
+    def authenticate(cls, login, password):
+        user = cls.query.filter(cls.login == login).one()
         if not bcrypt.verify(password, user.password):
             raise Exception("Invalid password")
         return user
